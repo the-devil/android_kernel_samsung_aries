@@ -1,0 +1,28 @@
+--- mm/filemap.c	2011-10-25 21:07:13.000000000 +1100
++++ mm/filemap.c	2011-11-11 13:28:22.304507611 +1100
+@@ -495,16 +495,22 @@
+ }
+ EXPORT_SYMBOL(add_to_page_cache_locked);
+ 
+-int add_to_page_cache_lru(struct page *page, struct address_space *mapping,
+-				pgoff_t offset, gfp_t gfp_mask)
++int __add_to_page_cache_lru(struct page *page, struct address_space *mapping,
++				pgoff_t offset, gfp_t gfp_mask, int tail)
+ {
+ 	int ret;
+ 
+ 	ret = add_to_page_cache(page, mapping, offset, gfp_mask);
+ 	if (ret == 0)
+-		lru_cache_add_file(page);
++		lru_cache_add_file_tail(page, tail);
+ 	return ret;
+ }
++
++int add_to_page_cache_lru(struct page *page, struct address_space *mapping,
++				pgoff_t offset, gfp_t gfp_mask)
++{
++	return __add_to_page_cache_lru(page, mapping, offset, gfp_mask, 0);
++}
+ EXPORT_SYMBOL_GPL(add_to_page_cache_lru);
+ 
+ #ifdef CONFIG_NUMA

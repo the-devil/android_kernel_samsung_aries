@@ -1,0 +1,10 @@
+--- init/main.c
++++ init/main.c
+@@ -748,6 +748,7 @@
+ 	system_state = SYSTEM_RUNNING;
+ 	numa_default_policy();
+ 
++	print_scheduler_version();
+ 
+ 	current->signal->flags |= SIGNAL_UNKILLABLE;
+ 

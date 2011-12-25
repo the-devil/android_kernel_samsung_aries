@@ -14,6 +14,8 @@
 #include <linux/smp.h>
 #include <linux/percpu.h>
 #include <linux/hrtimer.h>
+#include <linux/kref.h>
+#include <linux/workqueue.h>
 
 #include <asm/atomic.h>
 #include <asm/ptrace.h>
@@ -425,7 +427,14 @@ extern void raise_softirq(unsigned int nr);
  * only be accessed by the local cpu that they are for.
  */
 DECLARE_PER_CPU(struct list_head [NR_SOFTIRQS], softirq_work_list);
-
+#ifdef CONFIG_SCHED_BFS
+DECLARE_PER_CPU(struct task_struct *, ksoftirqd);
+ 
+ static inline struct task_struct *this_cpu_ksoftirqd(void)
+ {
+         return this_cpu_read(ksoftirqd);
+ }
+#endif
 /* Try to send a softirq to a remote cpu.  If this cannot be done, the
  * work will be queued to the local cpu.
  */

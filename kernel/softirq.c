@@ -53,9 +53,11 @@ EXPORT_SYMBOL(irq_stat);
 #endif
 
 static struct softirq_action softirq_vec[NR_SOFTIRQS] __cacheline_aligned_in_smp;
-
+#ifdef CONFIG_SCHED_BFS
+DEFINE_PER_CPU(struct task_struct *, ksoftirqd);
+#else
 static DEFINE_PER_CPU(struct task_struct *, ksoftirqd);
-
+#endif
 char *softirq_to_name[NR_SOFTIRQS] = {
 	"HI", "TIMER", "NET_TX", "NET_RX", "BLOCK", "BLOCK_IOPOLL",
 	"TASKLET", "SCHED", "HRTIMER",	"RCU"

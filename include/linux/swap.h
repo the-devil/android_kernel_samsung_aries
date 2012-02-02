@@ -360,16 +360,15 @@ extern void grab_swap_token(struct mm_struct *);
 extern void __put_swap_token(struct mm_struct *);
 extern void disable_swap_token(struct mem_cgroup *memcg);
 
-/* Only allow swap token to have effect if swap is full */
+/* Disable the swap token altogether. Not useful with zram */
 static inline int has_swap_token(struct mm_struct *mm)
 {
-	return (mm == swap_token_mm && vm_swap_full());
+	return false;
 }
 
 static inline void put_swap_token(struct mm_struct *mm)
 {
-	if (has_swap_token(mm))
-		__put_swap_token(mm);
+
 }
 
 #ifdef CONFIG_CGROUP_MEM_RES_CTLR

@@ -1357,15 +1357,23 @@ static void touch_keypad_onoff(int onoff)
 	if (onoff == TOUCHKEY_OFF)
 		msleep(30);
 	else
-		msleep(25);
+		msleep(50);
 }
 
-static void touch_keypad_gpio_sleep(int onoff) {
-	if (onoff == TOUCHKEY_ON)
+static void touch_keypad_gpio_sleep(int onoff)
+{
+	if (onoff == TOUCHKEY_ON) {
+		/*
+		 * reconfigure gpio to activate touchkey controller vdd in sleep mode
+		 */
 		s3c_gpio_slp_cfgpin(_3_GPIO_TOUCH_EN, S3C_GPIO_SLP_OUT1);
-
-	else
+	} else {
+		/*
+		 * reconfigure gpio to deactivate touchkey vdd in sleep mode,
+		 * this is the default
+		 */
 		s3c_gpio_slp_cfgpin(_3_GPIO_TOUCH_EN, S3C_GPIO_SLP_OUT0);
+	}
 
 }
 

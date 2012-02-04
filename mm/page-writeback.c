@@ -1096,13 +1096,13 @@ static void balance_dirty_pages(struct address_space *mapping,
 		pos_ratio = bdi_position_ratio(bdi, dirty_thresh,
 					       background_thresh, nr_dirty,
 					       bdi_thresh, bdi_dirty);
-		task_ratelimit = ((u64)dirty_ratelimit * pos_ratio) >>
-							RATELIMIT_CALC_SHIFT;
-		if (unlikely(task_ratelimit == 0)) {
+		if (unlikely(pos_ratio == 0)) {
 			pause = max_pause;
 			goto pause;
 		}
-		pause = HZ * pages_dirtied / task_ratelimit;
+		task_ratelimit = (u64)dirty_ratelimit *
+					pos_ratio >> RATELIMIT_CALC_SHIFT;
+		pause = (HZ * pages_dirtied) / (task_ratelimit | 1);
 		if (unlikely(pause <= 0)) {
 			trace_balance_dirty_pages(bdi,
 						  dirty_thresh,

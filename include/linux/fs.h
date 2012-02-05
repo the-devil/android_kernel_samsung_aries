@@ -1349,28 +1349,6 @@ extern pid_t f_getown(struct file *filp);
 extern int send_sigurg(struct fown_struct *fown);
 
 /*
- * Snapshotting support.
- */
-enum {
-	SB_UNFROZEN = 0,
-	SB_FREEZE_WRITE	= 1,
-	SB_FREEZE_TRANS = 2,
-	SB_FREEZE_LEVELS	/* Number of freezing states */
-};
-
-#define vfs_check_frozen(sb, level) \
-	wait_event((sb)->s_wait_unfrozen, ((sb)->s_frozen < (level)))
-
-#define get_fs_excl() atomic_inc(&current->fs_excl)
-#define put_fs_excl() atomic_dec(&current->fs_excl)
-#define has_fs_excl() atomic_read(&current->fs_excl)
-
-void sb_end_write(struct super_block *sb, int level);
-void sb_start_write(struct super_block *sb, int level);
-void sb_dup_write(struct super_block *sb, int level);
-void sb_wait_write(struct super_block *sb, int level);
-
-/*
  *	Umount options
  */
 

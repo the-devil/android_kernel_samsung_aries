@@ -5,7 +5,6 @@
 #include <linux/rcupdate.h>
 
 struct cfq_queue;
-<<<<<<< HEAD
 struct cfq_ttime {
 	unsigned long last_end_request;
 
@@ -14,8 +13,6 @@ struct cfq_ttime {
 	unsigned long ttime_mean;
 };
 
-=======
->>>>>>> 54c10e6... BFQ v3r1 from http://algo.ing.unimo.it/people/paolo/disk_sched/patches/3.0.0-v3r1/
 struct cfq_io_context {
 	void *key;
 
